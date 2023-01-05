@@ -8,12 +8,12 @@ class Item {
     this.sell_in--;
     if (this.quality >= 2 && this.sell_in < 0)
       this.quality -= 2;
-    if (this.quality >= 1)
+    else if (this.quality >= 1)
       this.quality--;
   }
 }
 
-class Regular extends Item {
+class Common extends Item {
   constructor(name, sell_in, quality){
     super(name, sell_in, quality);
   }
@@ -37,6 +37,8 @@ class Legendary extends Item {
   constructor(name, sell_in, quality){
     super(name, sell_in, quality);
   }
+  updateQuality(){
+  }
 }
 
 class StagePass extends Item {
@@ -46,13 +48,15 @@ class StagePass extends Item {
   updateQuality () {
     this.sell_in--;
     if (this.quality < 50) {
-      if (this.sell_in <= 10)
-      this.quality += 2;
-      if (this.sell_in <= 5)
-      this.quality += 3;
+      if (this.sell_in <= 0)
+        this.quality = 0;
+      else if (this.sell_in <= 5 && this.sell_in > 0)
+        this.quality += 3;
+      else if (this.sell_in <= 10 && this.sell_in > 5)
+        this.quality += 2;
+      else
+        this.quality++;
     }
-    if (this.sell_in === 0)
-      this.quality = 0;
   }
 }
 
@@ -64,27 +68,36 @@ class Conjured extends Item {
     this.sell_in--;
     if (this.quality >= 4 && this.sell_in < 0)
       this.quality -= 4;
-    if (this.quality >= 2)
-      this.quality -= 2;
-    if (this.quality === 1)
+    else if (this.quality === 1)
       this.quality--;
+    else if (this.quality >= 2)
+      this.quality -= 2;
   }
 }
 
 const items = [];
 
-const vest_dex = new Regular('+5 Dexterity Vest', 10, 20);
+const vest_dex = new Common('+5 Dexterity Vest', 10, 20);
+const elixir_mongoose = new Common('Elixir of the Mongoose', -1, 7)
+const silver_armor = new Common('Silver Cuirass', 3, 0)
 const cheese_brie = new AgedCheese('Aged Brie', 2, 0);
-const elixir_mongoose = new Regular('Elixir of the Mongoose', 5, 7)
 const sulfuras = new Legendary('Sulfuras, Hand of Ragnaros', 0, 80)
 const backstage_TAFKA = new StagePass('Backstage passes to a TAFKAL80ETC concert', 15, 20)
-const conjured_manaCake = new Conjured('Conjured Mana Cake', 3, 6)
+const backstage_TAFKA2 = new StagePass('7 days left to a TAFKAL80ETC concert', 7, 20)
+const backstage_TAFKA3 = new StagePass('3 days left to a TAFKAL80ETC concert', 3, 20)
+const backstage_TAFKA4 = new StagePass('Expired pass to a TAFKAL80ETC concert', 1, 20)
+const conjured_hpCake = new Conjured('Conjured HP Cake', 4, 10)
+const conjured_manaCake = new Conjured('Conjured Mana Cake', 0, 10)
 
-items.push(vest_dex, cheese_brie, elixir_mongoose, backstage_TAFKA, conjured_manaCake);
+items.push(vest_dex, elixir_mongoose, silver_armor, cheese_brie, sulfuras, backstage_TAFKA, backstage_TAFKA2, backstage_TAFKA3, backstage_TAFKA4, conjured_manaCake, conjured_hpCake);
 
 function passOneDay() {
   for (let item of items){
-    console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(item)));
+    console.log("======================================================================")
+    console.log(item);
+    // console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(item)));
+    item.updateQuality();
+    console.log(item);
   }
 }
 
