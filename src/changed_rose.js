@@ -48,9 +48,9 @@ class StagePass extends Item {
   updateQuality () {
     this.sell_in--;
     if (this.quality < 50) {
-      if (this.sell_in <= 0)
+      if (this.sell_in < 0)
         this.quality = 0;
-      else if (this.sell_in <= 5 && this.sell_in > 0)
+      else if (this.sell_in <= 5 && this.sell_in >= 0)
         this.quality += 3;
       else if (this.sell_in <= 10 && this.sell_in > 5)
         this.quality += 2;
